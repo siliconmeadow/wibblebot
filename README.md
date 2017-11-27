@@ -3,7 +3,7 @@
 This is a slack enabled hubot instance configured to run with [Docker Compose](https://docs.docker.com/compose/). It was inspired by the hubot instance running on Capgemini Engineering's slack instance which features karma and factoids. See the scripts enabled in `external-scripts.json`.
 
 ## Requirements
-* Docker (tested with 17.10.0-ce)
+* Docker (tested with 17.10.0-ce and also found to work on Docker 1.12 from the centos 7.3 repos)
 * Docker Compose
 
 ## Install, Configure, and Run
@@ -29,8 +29,17 @@ If you'd like to start from scratch without this repo, these are the steps you c
   * When you see `No databases found. Add manually? [Y/n]` hit return.
   * Type `redis` and hit return.
 1. Edit the generated Dockerfile
-  * Change the `FROM` to `FROM node:9.2.0-alpine` (`node 4.2` doesn't cut it, and the alpine image is 10% of the size of the official redis image.)
-
+  * Change the `FROM` to `FROM node:9.2.0-alpine` (`node 4.2` doesn't cut it, and the alpine image is 10% of the size of the official redis image)
+1. Edit the generated docker-compose.yml file by adding the following to the web image section:
+  ```
+  env_file:
+    - ./.env
+  ```
+1. Add a `.env` file with the following:
+```
+HUBOT_SLACK_TOKEN=<your slack api token>
+REDIS_URL=tcp://redis_1:6379
+```
 ## The generated README.md
 > The rest of this README.md was created when `yo hubot --adapter=slack --name=wibblebot` was run at the start of the project. See [getting started with hubot](https://github.com/hubotio/hubot/blob/master/docs/index.md) for more details, if you want to start from scratch. In any case, the information below provides some useful information for administering hubot, including instrutions for use on [Heroku][heroku]. Also note that the [hubot-heroku-keepalive](https://github.com/hubot-scripts/hubot-heroku-keepalive) was removed in this repo in commit [620dcd4](https://github.com/siliconmeadow/wibblebot/commit/620dcd4609039c3b2238b7ef33cb69bcd61f8a28), but you can easily re-enable it - it's only a one liner in the `external-scripts.json` file.
 
